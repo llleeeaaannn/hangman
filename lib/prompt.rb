@@ -26,11 +26,11 @@ module Prompt
   end
 
   def won_prompt
-    puts "Congratultions! Your guess was corrct, the word is #{hangman}. You won on turn #{turn}"
+    puts "Congratultions! Your guess was correct, the word is #{hangman}."
   end
 
   def lost_prompt
-    puts "Unfortunately you lost! You ran out of turns. The answer was: #{hangman}"
+    puts "Unfortunately you lost! You ran out of turns. The answer was: #{hangman}."
   end
 
   def result_prompt
@@ -44,5 +44,5 @@ module Prompt
   def thanks_prompt
     puts "Thank you for playing. Bye!"
   end
-  
+
 end

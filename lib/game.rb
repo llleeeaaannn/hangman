@@ -1,8 +1,8 @@
 require_relative 'word'
 require_relative 'prompt'
+require_relative 'serialize'
 
 class Game
-
   include Prompt
 
   attr_reader :hangman, :dashes, :used
@@ -14,18 +14,30 @@ class Game
   def start
     @hangman = Word.new.word
     @hangman_clone = @hangman.dup
-    @dashes = "_" * @hangman.length
-    @used = " "
+    @dashes = '_' * @hangman.length
+    @used = String.new
     @turn = 1
     @won = false
-    print @hangman
     turn
   end
 
   def turn
+    check_game_over
     turn_prompt(@turn)
+    check_input
+    result_prompt
+    @turn += 1
+    check_won
+  end
+
+  def check_input
     guess = gets.chomp.to_s.downcase
-    if guess.match?(/[A-Za-z]/) && @used.include?(guess)
+    if guess == 'save'
+      print @current_game
+      Serialize.new(@current_game, "text_one")
+      print "Successssss"
+    elsif
+      guess.match?(/[A-Za-z]/) && @used.include?(guess)
       used_prompt(guess)
       turn
     elsif guess.match?(/[A-Za-z]/)
@@ -34,8 +46,6 @@ class Game
       invalid_guess_prompt(guess)
       turn
     end
-    @turn += 1
-    @turn > 10 ? lost() : check_won()
   end
 
   def check_word(guess)
@@ -43,35 +53,38 @@ class Game
   end
 
   def check_letter(guess)
-    @used += guess + " "
+    @used += "#{guess} "
     while @hangman_clone.include?(guess)
       index = @hangman_clone.index(guess)
       @dashes[index] = guess
-      @hangman_clone[index] = "_"
+      @hangman_clone[index] = '_'
     end
-    if @dashes == @hangman
-      @won = true
-    end
+    @dashes == @hangman ? @won = true : nil
   end
 
   def check_won
-    if @won && @turn <= 10
-      won_prompt()
-      play_again()
+    if @won
+      won_prompt
+      play_again
     else
-      result_prompt()
-      turn()
+      turn
     end
   end
 
-  def lost()
-    lost_prompt()
-    play_again()
+  def check_game_over
+    if @turn > 10
+      lost
+      return
+    end
+  end
+
+  def lost
+    lost_prompt
+    play_again
   end
 
   def play_again
     play_again_prompt
-    gets.chomp.downcase == "y" ? Game.new.start : thanks_prompt()
+    gets.chomp.downcase == 'y' ? current_game = Game.new.start : thanks_prompt
   end
-
 end
