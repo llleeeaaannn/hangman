@@ -22,12 +22,17 @@ class Game
   end
 
   def turn
-    check_game_over
-    turn_prompt(@turn)
-    check_input
-    result_prompt
-    @turn += 1
-    check_won
+    if @turn > 10
+      overrr
+      lost
+      return
+    else
+      turn_prompt(@turn)
+      check_input
+      result_prompt
+      @turn += 1
+      check_won
+    end
   end
 
   def check_input
@@ -73,6 +78,7 @@ class Game
 
   def check_game_over
     if @turn > 10
+      overrr
       lost
       return
     end
