@@ -1,13 +1,5 @@
 module Prompt
 
-  def test_prompt
-    puts "THIS WAS PRINTED"
-  end
-
-  def overrr
-    puts "TURN OVER 10"
-  end
-
   def welcome_prompt
     puts "Welcome to Hangman!\n" +
     "The rules of Hangman are simple:\n" +

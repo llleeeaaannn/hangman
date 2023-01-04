@@ -76,14 +76,6 @@ class Game
     end
   end
 
-  def check_game_over
-    if @turn > 10
-      overrr
-      lost
-      return
-    end
-  end
-
   def lost
     lost_prompt
     play_again
